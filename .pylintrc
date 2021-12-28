@@ -1,12 +1,15 @@
 [MASTER]
 
+[FORMAT]
+max-line-length=120
+
 disable=
     C0114,  # missing-module-docstring
     C0115,  # missing-class-docstring
     C0116,  # missing-function-docstring
     C0103,  # invalid-name
     R0205,  # useless-object-inheritance
-    R0401,  # cyclic-import - FIXME
+    R0401,  # cyclic-import
     W0511,  # todos
     W0108,  # unnecessary-lambda
 
@@ -14,4 +17,4 @@ ignore=
 ignore-paths=\.venv/,\.git/
 ignore-patterns=
 
-py-version=3.10
+py-version=3.9

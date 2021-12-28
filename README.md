@@ -13,5 +13,3 @@ Use "poetry install" to install all project dependencies from pyproject.toml
 
 To activate venv use "poetry shell" or
 .venv/Scripts/activate.bat (Windows), source .venv/bin/activate (Linux, Mac OS)
-
-
