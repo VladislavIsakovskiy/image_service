@@ -1,8 +1,8 @@
 import os
 
-from image_service.app import image_app
-
 import uvicorn
+
+from image_service.app import image_app
 
 app = image_app
 
