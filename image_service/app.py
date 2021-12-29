@@ -1,3 +1,6 @@
+import os
+from os.path import join as path_join
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -18,4 +21,7 @@ def create_app() -> FastAPI:
 
 
 image_app = create_app()
-image_app.mount("/static", StaticFiles(directory="static"), name="static")
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+image_app.mount("/static", StaticFiles(directory=path_join(current_dir, "..", "static")), name="static")
