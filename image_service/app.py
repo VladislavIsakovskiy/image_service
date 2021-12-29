@@ -1,19 +1,9 @@
-import os
-
-from dotenv import load_dotenv
-
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from loguru import logger
 
 from starlette.responses import HTMLResponse
-
-load_dotenv()
-LOG_FOLDER = os.environ.get("DATA_FOLDER")
-
-logger.add(f"{LOG_FOLDER}/debug.log", format="{time} {level} {message}", filter="image_service", level="DEBUG",
-           rotation="5 MB")
 
 
 def create_app() -> FastAPI:
