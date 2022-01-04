@@ -1,3 +1,4 @@
+# type: ignore[attr-defined]
 import os
 
 import uvicorn
@@ -6,7 +7,7 @@ from image_service.logger_config import logger  # type: ignore[attr-defined]
 
 
 @logger.catch()
-def main():
+def main() -> None:
     from image_service.app import image_app  # pylint: disable=import-outside-toplevel
     app = image_app
     port = int(os.environ.get("PORT", 5555))
