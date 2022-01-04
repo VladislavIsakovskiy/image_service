@@ -1,5 +1,7 @@
 #local files
 image_service/tmp
+images/*.jpg
+images/*.png
 
 .idea/
 # Byte-compiled / optimized / DLL files
