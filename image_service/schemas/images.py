@@ -12,3 +12,7 @@ class Image(BaseModel):  # pylint: disable=too-few-public-methods
 
 class ImagesOut(BaseModel):  # pylint: disable=too-few-public-methods
     images: List[Image]
+
+
+class ImageDeleteOut(BaseModel):  # pylint: disable=too-few-public-methods
+    message: str
