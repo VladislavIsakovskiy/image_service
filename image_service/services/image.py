@@ -3,7 +3,11 @@ import ntpath
 import os
 from typing import List
 
+from image_service.errors import APIImageNotDeleted, APIImageNotFound
 from image_service.schemas.images import Image
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+IMAGES_FOLDER = os.path.join(CURRENT_DIR, "..", "..", "images")
 
 
 class ImageService:
@@ -16,13 +20,29 @@ class ImageService:
             images.append(image)
         return images
 
+    def get_image_info(self, image_name: str) -> Image:
+        image_path = self.get_image_path(image_name)
+        return self.generate_image(image_path)
+
+    def delete_image(self, image_name: str) -> str:
+        image_path = self.get_image_path(image_name)
+        os.remove(image_path)
+        if os.path.exists(image_path):
+            raise APIImageNotDeleted(image_name)
+        return f"Image {image_name} deleted successfully!"
+
+    @staticmethod
+    def get_image_path(image_name: str) -> str:
+        image_path = os.path.join(IMAGES_FOLDER, image_name)
+        if not os.path.exists(image_path):
+            raise APIImageNotFound(image_name)
+        return image_path
+
     @staticmethod
     def get_all_relevant_image_paths(relevant_extensions: tuple) -> List[str]:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(current_dir, "..", "..", "images")
         image_paths = []
         for ext in relevant_extensions:
-            image_paths.extend(glob.glob(os.path.join(image_path, ext)))
+            image_paths.extend(glob.glob(os.path.join(IMAGES_FOLDER, ext)))
         return image_paths
 
     @staticmethod

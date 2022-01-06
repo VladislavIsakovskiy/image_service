@@ -1,7 +1,7 @@
 # type: ignore[no-untyped-def]
 from fastapi import APIRouter
 
-from image_service.schemas.images import ImagesOut
+from image_service.schemas.images import Image, ImageDeleteOut, ImagesOut
 from image_service.services.image import ImageService
 
 router = APIRouter(
@@ -17,7 +17,13 @@ async def read_images():
     return ImagesOut(images=images)
 
 
-# @router.post("/", response_model=BorrowerOut)
-# async def create_item(borrower_data: BorrowerIn, session: AsyncSession = Depends(get_session)):
-#     borrower = await BorrowerService(session).create_borrower(borrower_data.email)
-#     return BorrowerOut.from_orm(borrower)
+@router.get("/{image_name}/", response_model=Image)
+async def read_image(image_name: str):
+    image_info = ImageService().get_image_info(image_name)
+    return image_info
+
+
+@router.get("/{image_name}/delete", response_model=ImageDeleteOut)
+async def delete_image(image_name: str):
+    status_message = ImageService().delete_image(image_name)
+    return ImageDeleteOut(message=status_message)
