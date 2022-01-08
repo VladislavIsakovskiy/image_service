@@ -1,7 +1,7 @@
 # type: ignore[no-untyped-def]
 from fastapi import APIRouter, File, UploadFile
 
-from image_service.schemas.images import ImageInfo, ImageStatusOut, ImagesOut
+from image_service.schemas.images import ImageIn, ImageInfo, ImageStatusOut, ImagesOut
 from image_service.services.image import ImageService
 
 router = APIRouter(
@@ -36,6 +36,6 @@ async def upload_image(name: str, image_file: UploadFile = File(None)):
 
 
 @router.post("/upload_image_from_bytes", response_model=ImageStatusOut)
-async def upload_image_from_bytes(name: str, image_bytes: str):
-    added_image_status = await ImageService().add_image_from_bytes(name, image_bytes)
+async def upload_image_from_bytes(image_data: ImageIn):
+    added_image_status = await ImageService().add_image_from_bytes(image_data.name, image_data.image_str)
     return ImageStatusOut(message=added_image_status)
