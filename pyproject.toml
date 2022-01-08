@@ -8,9 +8,9 @@ authors = ["visakovskiy <vladislav.isakovskiy@dataart.com>"]
 python = "^3.9"
 
 #FastAPI
-fastapi = "^0.70.1"
+fastapi = "^0.71.0"
 uvicorn = "^0.16.0"
-starlette = "^0.16.0"
+starlette = "^0.17.1"
 python-multipart = "^0.0.5"
 
 #logs and env
@@ -21,6 +21,7 @@ python-dotenv = "^0.19.2"
 #additional
 docker = "^5.0.3"
 pre-commit = "^2.16.0"
+Pillow = "^9.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

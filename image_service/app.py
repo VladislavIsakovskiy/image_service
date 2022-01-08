@@ -2,7 +2,7 @@
 import os
 from os.path import join as path_join
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -32,15 +32,26 @@ image_app.mount(
 )
 
 
-@image_app.exception_handler(Exception)
-def global_exception_handler(_request: Request, exc: Exception) -> JSONResponse:
-    return JSONResponse(
-        content={"message": str(exc)},
-    )
+@image_app.middleware("http")
+async def request_log(request: Request, call_next):
+    try:
+        response: Response = await call_next(request)
+        if response.status_code < 400:
+            level = "INFO"
+        else:
+            level = "WARNING"
+        logger.log(level, f"{request.method} {request.url} Status code: {response.status_code}")
+        return response
+    except Exception as exc:  # noqa # pylint: disable=broad-except
+        logger.exception(str(exc))
+        return JSONResponse(
+            content={"message": "Something went wrong!"},
+        )
 
 
 @image_app.exception_handler(APIError)
 def api_exception_handler(_request: Request, exc: APIError) -> JSONResponse:
+    logger.warning(exc.message)
     return JSONResponse(
         status_code=exc.status_code,
         content={"message": exc.message},
