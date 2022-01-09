@@ -9,10 +9,10 @@ from PIL import Image, UnidentifiedImageError
 
 from dotenv import load_dotenv
 
-from fastapi import File, UploadFile
+from fastapi import File
 
-from image_service.errors import APIImageAlreadyExists, APIImageMaxSizeExceeded, APIImageNotDeleted, \
-    APIImageNotFound, APIImageWrongFormat
+from image_service.errors import APIImageAlreadyExists, APIImageMaxSizeExceeded, \
+    APIImageNotDeleted, APIImageNotFound, APIImageWrongFormat
 from image_service.schemas.images import ImageInfo
 
 load_dotenv()
@@ -66,42 +66,21 @@ class ImageService:
             raise APIImageNotDeleted(image_name)
         return f"Image {image_name} deleted successfully!"
 
-    async def add_image_from_file(self, image_name: str, image_file: UploadFile) -> str:
-        """
-        Add new image to server and return message in case of success using it's name and file as input parameters
-        If image with similar name already exists raise APIImageAlreadyExists exception
-        If there are some problems with opening or format with image file raise APIImageWrongFormat exception
-        If image file's size more than max_size from .env raise APIImageMaxSizeExceeded exception
-        :param image_name: str
-        :param image_file: UploadFile
-        :return: str
-        """
-        image_path = await self._get_image_path(image_name)
-        is_image_exists = await self._check_if_image_exists(image_path)
-        if is_image_exists is True:
-            raise APIImageAlreadyExists(image_name)
-        await self._check_image(image_file.file)
-        new_image = Image.open(image_file.file)
-        new_image.save(image_path)
-        return f"Image {image_name} uploaded successfully!"
-
-    async def add_image_from_bytes(self, image_name: str, image_bytes: str) -> str:
+    async def add_image(self, image_name: str, image_str: str) -> str:
         """
         Add new image to server and return message in case of success
-        using it's name and str (base64) as input parameters
-
         If image with similar name already exists raise APIImageAlreadyExists exception
         If there are some problems with opening or format with image file raise APIImageWrongFormat exception
         If image file's size more than max_size from .env raise APIImageMaxSizeExceeded exception
         :param image_name: str
-        :param image_bytes: str
+        :param image_str: str
         :return: str
         """
         image_path = await self._get_image_path(image_name)
         is_image_exists = await self._check_if_image_exists(image_path)
         if is_image_exists is True:
             raise APIImageAlreadyExists(image_name)
-        decoded_image_str = base64.b64decode(image_bytes)
+        decoded_image_str = base64.b64decode(image_str)
         await self._check_image(io.BytesIO(decoded_image_str))
         new_image = Image.open(io.BytesIO(decoded_image_str))
         new_image.save(image_path)

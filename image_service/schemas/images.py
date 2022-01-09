@@ -14,10 +14,6 @@ class ImagesOut(BaseModel):  # pylint: disable=too-few-public-methods
     images: List[ImageInfo]
 
 
-class ImageStatusOut(BaseModel):  # pylint: disable=too-few-public-methods
-    message: str
-
-
 class ImageIn(BaseModel):  # pylint: disable=too-few-public-methods
     name: str
     image_str: str

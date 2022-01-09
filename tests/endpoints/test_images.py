@@ -26,28 +26,28 @@ async def test_read_non_existed_image_raise_exception(test_async_client):  # noq
 
 
 @pytest.mark.asyncio
-async def test_upload_image_from_bytes_success(test_async_client):  # noqa
+async def test_upload_image_success(test_async_client):  # noqa
     with open("../files/image_b64_str.txt", "r", encoding="cp1251") as f:
-        image_bytes = f.read()
+        image_str = f.read()
     request_data = {
         "name": "3.jpg",
-        "image_str": image_bytes,
+        "image_str": image_str,
     }
-    response = await test_async_client.post("/v1/images/upload_image_from_bytes", json=request_data)
+    response = await test_async_client.post("/v1/images/upload_image", json=request_data)
     assert response.status_code == 200
-    message = json.loads(response.content)["message"]
+    message = json.loads(response.content)
     assert message == "Image 3.jpg uploaded successfully!"
 
 
 @pytest.mark.asyncio
-async def test_upload_existed_name_image_from_bytes_raise_exception(test_async_client):  # noqa
+async def test_upload_existed_name_image_raise_exception(test_async_client):  # noqa
     with open("../files/image_b64_str.txt", "r", encoding="cp1251") as f:
-        image_bytes = f.read()
+        image_str = f.read()
     request_data = {
         "name": "3.jpg",
-        "image_str": image_bytes,
+        "image_str": image_str,
     }
-    response = await test_async_client.post("/v1/images/upload_image_from_bytes", json=request_data)
+    response = await test_async_client.post("/v1/images/upload_image", json=request_data)
     assert response.status_code == 409
     message = json.loads(response.content)["message"]
     assert message == "Image with 3.jpg name already exists. Please, choose other name."
@@ -55,7 +55,7 @@ async def test_upload_existed_name_image_from_bytes_raise_exception(test_async_c
 
 @pytest.mark.asyncio
 async def test_delete_non_existed_image_raise_exception(test_async_client):  # noqa
-    response = await test_async_client.get("/v1/images/4.jpg/delete")
+    response = await test_async_client.delete("/v1/images/4.jpg/delete")
     assert response.status_code == 422
     message = json.loads(response.content)["message"]
     assert message == "There is no image 4.jpg at server."
@@ -63,7 +63,7 @@ async def test_delete_non_existed_image_raise_exception(test_async_client):  # n
 
 @pytest.mark.asyncio
 async def test_delete_image_success(test_async_client):  # noqa
-    response = await test_async_client.get("/v1/images/3.jpg/delete")
+    response = await test_async_client.delete("/v1/images/3.jpg/delete")
     assert response.status_code == 200
-    message = json.loads(response.content)["message"]
+    message = json.loads(response.content)
     assert message == "Image 3.jpg deleted successfully!"
