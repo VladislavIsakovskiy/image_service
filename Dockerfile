@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -U poetry
 COPY pyproject.toml poetry.lock poetry.toml .env ./
 COPY image_service ./image_service/
 COPY static ./static/
+COPY images ./images/
 
 RUN poetry install --no-dev -n
 

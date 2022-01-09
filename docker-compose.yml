@@ -5,5 +5,7 @@ services:
     build: .  # folder which contain DockerFile
     ports:
       - "5555:5555"
+    volumes:
+      - ./tmp:/usr/local/app/tmp
 #    stdin_open: true  # for input in bash (DEBUG stage)
 #    tty: true  # for using as terminal (DEBUG stage)
