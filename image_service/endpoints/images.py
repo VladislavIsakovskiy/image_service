@@ -1,7 +1,7 @@
 # type: ignore[no-untyped-def]
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter
 
-from image_service.schemas.images import ImageIn, ImageInfo, ImageStatusOut, ImagesOut
+from image_service.schemas.images import ImageIn, ImageInfo, ImagesOut
 from image_service.services.image import ImageService
 
 router = APIRouter(
@@ -23,19 +23,13 @@ async def read_image(image_name: str):
     return image_info
 
 
-@router.get("/{image_name}/delete", response_model=ImageStatusOut)
+@router.delete("/{image_name}/delete", response_model=str)
 async def delete_image(image_name: str):
     deleted_image_status_message = await ImageService().delete_image(image_name)
-    return ImageStatusOut(message=deleted_image_status_message)
+    return deleted_image_status_message
 
 
-@router.post("/upload_image", response_model=ImageStatusOut)
-async def upload_image(name: str, image_file: UploadFile = File(None)):
-    added_image_status = await ImageService().add_image_from_file(name, image_file)
-    return ImageStatusOut(message=added_image_status)
-
-
-@router.post("/upload_image_from_bytes", response_model=ImageStatusOut)
-async def upload_image_from_bytes(image_data: ImageIn):
-    added_image_status = await ImageService().add_image_from_bytes(image_data.name, image_data.image_str)
-    return ImageStatusOut(message=added_image_status)
+@router.post("/upload_image", response_model=str)
+async def upload_image(image_data: ImageIn):
+    added_image_status = await ImageService().add_image(image_data.name, image_data.image_str)
+    return added_image_status
