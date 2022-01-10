@@ -29,7 +29,7 @@ async def delete_image(image_name: str):
     return deleted_image_status_message
 
 
-@router.post("/upload_image", response_model=str)
+@router.post("/{image_name}/", response_model=str)
 async def upload_image(image_data: ImageIn):
     added_image_status = await ImageService().add_image(image_data.name, image_data.image_str)
     return added_image_status
