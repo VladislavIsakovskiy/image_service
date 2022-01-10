@@ -8,9 +8,9 @@ This service is designed to:
 
 ## Endpoints
 - GET /images - Return info for all images that contain server
-- GET /image/{image_name} - Returns info for particular image
-- DELETE /images/{image_name}/delete - Delete existed image
-- POST /images/upload_image - Add new image to server from base64 str
+- GET /images/{image_name} - Returns info for particular image
+- POST /images/{image_name} - Add new image to server from base64 str
+- DELETE /images/{image_name} - Delete existed image
 
 ## Start service
 To start service using Docker use command:
