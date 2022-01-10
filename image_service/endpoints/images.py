@@ -23,7 +23,7 @@ async def read_image(image_name: str):
     return image_info
 
 
-@router.delete("/{image_name}/delete", response_model=str)
+@router.delete("/{image_name}/", response_model=str)
 async def delete_image(image_name: str):
     deleted_image_status_message = await ImageService().delete_image(image_name)
     return deleted_image_status_message
